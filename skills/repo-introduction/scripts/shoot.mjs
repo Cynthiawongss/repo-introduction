@@ -10,6 +10,8 @@
 // Each shot: open url → run `setup` (before reload, e.g. seed localStorage) → reload → run each `steps` entry
 // (JS strings or {click, type, wait, until}) → wait until `until` is true and the page has stopped changing →
 // capture. Shots in one list share one browser profile, so state set by an earlier shot carries over.
+// Optional per shot: "log" (a JS expression printed at capture time, e.g. the status text shown), "hide"
+// (CSS selectors hidden just before capture), "clip" ({x, y, width, height} in CSS px), "still": false.
 import { spawn } from 'node:child_process';
 import { mkdtempSync, writeFileSync, readFileSync, existsSync, mkdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -149,11 +151,14 @@ async function shoot(c, s) {
   if (s.wait) await sleep(Number(s.wait));
   const still = s.still === false ? true : await waitStill(c, Number(s.stillTimeout || 15000));
   if (s.hide) await evaluate(c, `(() => { const st = document.createElement('style'); st.textContent = ${JSON.stringify(s.hide)} + '{visibility:hidden !important}'; document.head.appendChild(st); })()`);
-  const params = { format: 'png', captureBeyondViewport: !!s.full };
+  const jpg = /\.jpe?g$/i.test(s.out);   // .jpg/.jpeg outputs are saved as JPEG (quality 88), everything else as PNG
+  const params = { format: jpg ? 'jpeg' : 'png', ...(jpg ? { quality: 88 } : {}), captureBeyondViewport: !!s.full };
+  if (s.clip) params.clip = { ...s.clip, scale: 1 };
   if (s.full) { const m = await c.send('Page.getLayoutMetrics'); const cs = m.cssContentSize || m.contentSize; params.clip = { x: 0, y: 0, width: cs.width, height: cs.height, scale: 1 }; }
   const { data } = await c.send('Page.captureScreenshot', params);
   mkdirSync(dirname(s.out), { recursive: true });
   writeFileSync(s.out, Buffer.from(data, 'base64'));
+  if (s.log) console.log(`       log: ${JSON.stringify(await evaluate(c, s.log))}`);
   const errors = await evaluate(c, 'window.__shootErrors || []');
   console.log(`${still ? 'ok   ' : 'MOVING'} ${w * scale}x${h * scale}  ${s.out}${errors.length ? '  page errors: ' + errors.join(' | ') : ''}`);
   if (!still) console.log('       the page was still changing when captured; raise "wait" or add an "until" condition, then look at the image');

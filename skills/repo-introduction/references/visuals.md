@@ -104,6 +104,9 @@ Rules:
 - Same viewport and scale for the whole set (1440×1000 at 2× → 2880×2000 is a good default; phones: `390x844`, scale 3, `"mobile": true`).
 - Capture in the README's language (`lang`) and the theme the README describes (`dark`, or the app's own `?theme=`).
 - Hide debug overlays and cookie banners with `"hide": ".selector, .other"`.
+- If one shot looks different from the others (buttons missing, a dimmed screen), find out why before calling it a bug or a bad capture. EverPaw fades its buttons after 7 seconds without input on purpose; that became a point in its README.
+- To caption a capture with what the app really said at that moment, add `"log": "document.querySelector('.status').textContent"`; it prints at capture time. Use `textContent`, not `innerText`, when the element is hidden for the shot. To catch a behaviour that happens at random (a pet falling asleep), wait for it with an `until` on that text.
+- Output names ending in `.jpg` are saved as JPEG (quality 88). Prefer JPEG for screenshots when the repository is also a live site, so the deploy stays light.
 - Open every PNG before using it. Reject empty states, half-loaded fonts, spinners, overlapping toasts and wrong language.
 - Name them `01-…png`, `02-…png` in reading order and reference them with relative paths.
 
