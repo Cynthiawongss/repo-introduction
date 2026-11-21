@@ -58,7 +58,9 @@ async function launch() {
   const proc = spawn(bin, [
     '--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=${profile}`,
     '--no-first-run', '--no-default-browser-check', '--hide-scrollbars', '--mute-audio',
-    '--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--ignore-gpu-blocklist', 'about:blank',
+    // SHOOT_ANGLE=metal (macOS) or gl/vulkan uses the real GPU: much faster for heavy WebGL (glass, transmission).
+    ...(process.env.SHOOT_ANGLE ? [`--use-angle=${process.env.SHOOT_ANGLE}`] : ['--enable-unsafe-swiftshader', '--use-angle=swiftshader']),
+    '--ignore-gpu-blocklist', 'about:blank',
   ], { stdio: 'ignore' });
   let ws;
   for (let i = 0; i < 80 && !ws; i++) {

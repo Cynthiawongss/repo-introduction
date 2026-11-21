@@ -123,7 +123,11 @@ def main():
     if a.source and en:
         corpus = []
         for src in a.source:
-            for root, dirs, files in os.walk(os.path.join(repo, src)):
+            # --source is relative to the repository, or else to the current folder
+            base = os.path.join(repo, src) if os.path.isdir(os.path.join(repo, src)) else os.path.abspath(src)
+            if not os.path.isdir(base):
+                say('WARN', f'source folder not found: {src}'); continue
+            for root, dirs, files in os.walk(base):
                 dirs[:] = [d for d in dirs if d not in ('node_modules', '.git', 'dist', 'build', '.next')]
                 for f in files:
                     if f.endswith(('.js', '.mjs', '.ts', '.tsx', '.jsx', '.vue', '.svelte', '.html', '.py', '.json', '.swift', '.kt', '.go', '.rs', '.css', '.md')) and 'README' not in f:
@@ -133,7 +137,7 @@ def main():
         for name, doc in ((en_name, en), (zh_name, zh)):
             if not doc: continue
             prose = FENCE.sub('', doc['md'])
-            claims = set(re.findall(r'\*\*([^*\n]{2,40})\*\*', prose)) | set(re.findall(r'`([^`\n]{2,60})`', prose))
+            claims = set(re.findall(r'\*\*([^*\n]{1,40}?)\*\*', prose)) | set(re.findall(r'`([^`\n]{2,60})`', prose))
             names = set()
             for root, dirs, files in os.walk(repo):
                 dirs[:] = [d for d in dirs if d not in ('node_modules', '.git')]
