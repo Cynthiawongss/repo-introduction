@@ -106,6 +106,9 @@ Rules:
 - Hide debug overlays and cookie banners with `"hide": ".selector, .other"`.
 - If one shot looks different from the others (buttons missing, a dimmed screen), find out why before calling it a bug or a bad capture. EverPaw fades its buttons after 7 seconds without input on purpose; that became a point in its README.
 - To caption a capture with what the app really said at that moment, add `"log": "document.querySelector('.status').textContent"`; it prints at capture time. Use `textContent`, not `innerText`, when the element is hidden for the shot. To catch a behaviour that happens at random (a pet falling asleep), wait for it with an `until` on that text.
+- **Making pieces in a creative app.** When the app makes something (a glass tree, a drawing), make the sample through its real input: dispatch pointer and keyboard events from the page (a held button that calls `setPointerCapture` on a synthetic pointer may silently fail; its keyboard shortcut works). Then save the app's own draft from storage to `assets-src/` (a page cannot write files: post it to a tiny local receiver), and seed that draft in `setup` for every later shot. The pieces stay the same across re-renders.
+- Heavy WebGL (transmission, thousands of meshes) can crawl under the default software renderer, so time-based animations never finish. Run with `SHOOT_ANGLE=metal` (macOS) to use the real GPU.
+- For cover material, capture the same states again with the interface hidden (`"hide"`), in a separate shot list, so the cover can crop freely without UI text inside the frame.
 - Output names ending in `.jpg` are saved as JPEG (quality 88). Prefer JPEG for screenshots when the repository is also a live site, so the deploy stays light.
 - Open every PNG before using it. Reject empty states, half-loaded fonts, spinners, overlapping toasts and wrong language.
 - Name them `01-…png`, `02-…png` in reading order and reference them with relative paths.
