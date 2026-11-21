@@ -154,13 +154,13 @@ async function shoot(c, s) {
   const jpg = /\.jpe?g$/i.test(s.out);   // .jpg/.jpeg outputs are saved as JPEG (quality 88), everything else as PNG
   const params = { format: jpg ? 'jpeg' : 'png', ...(jpg ? { quality: 88 } : {}), captureBeyondViewport: !!s.full };
   if (s.clip) params.clip = { ...s.clip, scale: 1 };
-  if (s.full) { const m = await c.send('Page.getLayoutMetrics'); const cs = m.cssContentSize || m.contentSize; params.clip = { x: 0, y: 0, width: cs.width, height: cs.height, scale: 1 }; }
+  if (s.full && !s.clip) { const m = await c.send('Page.getLayoutMetrics'); const cs = m.cssContentSize || m.contentSize; params.clip = { x: 0, y: 0, width: cs.width, height: cs.height, scale: 1 }; }
   const { data } = await c.send('Page.captureScreenshot', params);
   mkdirSync(dirname(s.out), { recursive: true });
   writeFileSync(s.out, Buffer.from(data, 'base64'));
   if (s.log) console.log(`       log: ${JSON.stringify(await evaluate(c, s.log))}`);
   const errors = await evaluate(c, 'window.__shootErrors || []');
-  console.log(`${still ? 'ok   ' : 'MOVING'} ${w * scale}x${h * scale}  ${s.out}${errors.length ? '  page errors: ' + errors.join(' | ') : ''}`);
+  console.log(`${still ? 'ok   ' : 'MOVING'} ${Math.round((params.clip?.width ?? w) * scale)}x${Math.round((params.clip?.height ?? h) * scale)}  ${s.out}${errors.length ? '  page errors: ' + errors.join(' | ') : ''}`);
   if (!still) console.log('       the page was still changing when captured; raise "wait" or add an "until" condition, then look at the image');
 }
 
