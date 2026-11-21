@@ -1,0 +1,28 @@
+{
+  "defaults": { "size": "1440x1000", "scale": 2, "lang": "en-US", "stillTimeout": 10000 },
+  "shots": [
+    {
+      "url": "http://127.0.0.1:4173/?theme=day",
+      "out": "../assets/01-home.png",
+      "setup": "localStorage.clear()",
+      "wait": 1500
+    },
+    {
+      "url": "http://127.0.0.1:4173/",
+      "out": "../assets/02-editor.png",
+      "steps": [
+        { "click": "[data-act=start]" },
+        { "until": "document.querySelector('.editor')" },
+        { "type": "#title", "text": "The Long Way Home" },
+        { "wait": 800 }
+      ],
+      "hide": ".toast, .cookie-banner"
+    },
+    {
+      "url": "http://127.0.0.1:4173/",
+      "out": "../assets/03-mobile.png",
+      "size": "390x844", "scale": 3, "mobile": true,
+      "until": "window.appReady === true"
+    }
+  ]
+}
