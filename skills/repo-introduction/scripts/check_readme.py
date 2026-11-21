@@ -86,7 +86,7 @@ def check_file(repo, name):
     return {'md': md, 'images': images}
 
 def numbers(md):
-    return sorted(set(NUMBER.findall(strip_code(re.sub(r'\([^)]*\)', '', md)))))
+    return sorted(set(NUMBER.findall(strip_code(re.sub(r'\]\([^)]*\)', ']', md)))))   # drop link targets, keep prose in any brackets
 
 def code_blocks(md):
     return [b.strip() for _, b in FENCE.findall(md)]

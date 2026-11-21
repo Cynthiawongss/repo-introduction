@@ -13,6 +13,8 @@ Before choosing a style, write one sentence about the relationship the picture m
 | Spreadsheet → decision UI | a bar chart | numbers that change for a traceable reason |
 | This skill | a README icon | every line on the homepage points to its source |
 
+Check it against the project's own design rules before going further. If the project says previews must come from the real renderer, the cover must too. If the owner moved away from a style (luma-tape's direction rejects nostalgic watercolour), keep that style off the cover even if the product still offers it. Borrow the product's fonts, colour tokens and recurring marks (luma-tape: Instrument Serif, DM Mono, crop marks, "( fig. 01 )" labels, colour chips with hex values) so the cover reads as the same product.
+
 Then decide the subject, composition, palette and type. Fill [the cover brief](../templates/cover-brief.md): what to express, what could mislead, which dimensions the user already liked or rejected, and how this cover must differ from the owner's other projects.
 
 ## 2. Choose how to make it
@@ -28,6 +30,10 @@ Why this wins over image generation:
 - It is reproducible: commit the script, re-render after the product changes, export 2× by URL flag.
 
 How it was done for ringcay: a separate `hero.html` + `hero.js` imported the app's ring and island kit (Three.js), staged one ring with an island inside, rendered a main view and two close-ups (used as "photos" in polaroid frames), and composed everything on a 1920×1080 canvas: headline, handwritten captions, callout lines from each object to its story, a soft leaf shadow and film grain. A tiny local server saved the canvas output to `out/`. `?scale=2` produced 3840×2160.
+
+When the product's code needs a bundler (Vite, webpack), put the cover page inside the project (for example `assets-src/cover.html`) and open it through the project's dev server, so `import { drawPattern } from '/src/patterns.js'` just works. The first load of a dev server can take a minute while it optimises dependencies; give `shoot.mjs` a `--timeout 120000`.
+
+Real exports from the app are good material too (a PNG the user exported from their own design). If an export has a white background baked in, make the white transparent before reprinting it on a coloured base.
 
 ### b. Compose real material in HTML (default otherwise)
 
@@ -94,7 +100,7 @@ Use `scripts/shoot.mjs`. It launches the local Chrome headless, sets the viewpor
 Rules:
 - **Wait for the finished state.** The script compares frames and prints `MOVING` if the page was still changing. Raise `wait`, add an `until` condition that matches the app's ready state, or click through to the end of an animation. A Codex screenshot of ringcay was taken while the island was still growing and showed a bare green blob; it had to be dropped.
 - Continuously animated pages (spinning 3D, video) never stand still: set `"still": false` and choose the moment with `until`/`wait`, then look at the image.
-- **Fictional sample data, entered through the real UI** (or seeded with `setup` into the app's own storage). Never real user data or private paths. Say in the README that the example is fictional.
+- **Fictional sample data, entered through the real UI**, or seeded with `setup` into the app's own storage format (read the app's save/normalise code to get the keys right; this reaches a precise state such as one theme in one print style without clicking through the UI). Never real user data or private paths. Say in the README that the example is fictional.
 - Same viewport and scale for the whole set (1440×1000 at 2× → 2880×2000 is a good default; phones: `390x844`, scale 3, `"mobile": true`).
 - Capture in the README's language (`lang`) and the theme the README describes (`dark`, or the app's own `?theme=`).
 - Hide debug overlays and cookie banners with `"hide": ".selector, .other"`.

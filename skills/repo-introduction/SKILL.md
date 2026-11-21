@@ -17,13 +17,18 @@ From the request, decide which of these are in scope: **content** (README pair, 
 
 Read the source, the existing README and any handoff notes. Run the app or the tool when possible. Fill [the project brief](templates/project-brief.md) as working notes: user and situation, input, actual behaviour, output, how to start, dependencies, what is simulated or sample data, what is untested, licence. Unknown stays unknown. Keep names the user already accepted.
 
-When another assistant already wrote a draft or a handoff, read it, then verify it against the code before reusing anything. Reuse what holds up; do not rewrite good work for the sake of it.
+**Find the design idea, not only the features.** Every project has a few ideas that explain why it is the way it is. Look for them in the project's own rules (AGENTS.md, CLAUDE.md, handoff notes), in code comments that state principles, in the owner's stated aesthetic, and in the UI itself (fonts, colour tokens, recurring marks and labels). Write them down in a sentence each, for example "a cover is a real crop of the theme's own print, never a separate illustration", or "the island floats inside the band so the engraving stays visible". These ideas shape the README (explain them to the visitor), and they are hard constraints for the cover (never contradict them, and borrow the product's own type, colours and marks).
+
+When another assistant already wrote a draft or a handoff, read it, then verify it against the code before reusing anything. Reuse what holds up; do not rewrite good work for the sake of it. If a README and a cover are already published and approved, change what is wrong and propose a new cover as a candidate; the approved one stays until the user picks the new one.
+
+If the local checkout has unpushed work from someone else (or another session), or has diverged from the remote, do the introduction in a separate worktree from the remote branch (`git worktree add -b docs/… <path> origin/main`) so neither line of work is touched.
 
 ## 2. Write the README pair
 
 Use [the English template](templates/README.en.md) and [the Chinese template](templates/README.zh-CN.md) as scaffolds and delete what does not apply. Default order: name → language switch → one-line outcome → cover → what you can do (a table) → one concrete worked example → get started → limits. Method and wording rules: [method](references/method.md).
 
 - Lead with the user's outcome and one real example (input → what happens → result), not a feature list.
+- Explain the design idea in a short section when the product has one: what makes it different and why it looks the way it does, with a screenshot that proves it.
 - Quote UI labels exactly as the app shows them, and check them in the source.
 - Say plainly what is not real yet: local-only storage, demo checkout, sample data, untested platforms.
 - English first in `README.md`, Chinese in `README.zh-CN.md`; same facts, numbers, commands and images, each written naturally.

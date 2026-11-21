@@ -10,6 +10,7 @@ These come from real work for this owner in November 2026: five skill repositori
 | Spreadsheet to decision UI | see relationships, causes and scenarios in numbers | white pixel terrain, mint background, wine-red path | 3D is a means, not a required style |
 | Script to video segments | segments generated separately still connect | photo collage of one person's continuous actions | keep the liked style, replace the off-topic subject |
 | ringcay | every part of the ring has a reason | a ring rendered with the app's own 3D code, island inside, callouts to the stories | render from the product; change only what the user names |
+| Luma Tape (review, Nov 2026) | remix a print or draw your own; one print everywhere | candidate: four strips printed by the app's own `paintFlat` (Blur, Stitch, Symbol, a drawn blank roll) | the project's own rules are cover rules; explain the design idea in the README |
 
 ## The ringcay case in detail
 
@@ -22,6 +23,15 @@ These come from real work for this owner in November 2026: five skill repositori
 4. Candidate 01 was shown with its weaknesses listed. Feedback: "the band is a bit plain". Only the band changed: a bezel-set aquamarine, five small stones (one per friend at the table), a vine engraving and milgrain edges, with the stone caption updated to match. Approved: "This works".
 5. A 3840×2160 export was made from the same script, and the README referenced `assets/hero.png` with a concept-illustration note in both languages.
 6. Codex's README was kept, after verifying labels and counts against the code. Two fixes: the new cover, and the mid-animation screenshot dropped. Merged the remote's two new commits, pushed, and checked the served README and image URLs.
+
+## The Luma Tape review
+
+Codex had already published a README and an AI-generated cover the owner approved. The README was good and stayed. What a design reading added:
+- The code says "Covers, the flat preview, the 3D roll and the exports all call this one function" and "A cover is a real crop of the theme's own print, never a separate illustration". The AI cover broke that: its stitch shells were shapeless blobs the app cannot print, and its hand-drawn strip was nicer than the app's brush can make. Candidate 01 printed every strip with the app's own `paintFlat`.
+- The first render included the Classic watercolour print. The project's direction explicitly moves away from nostalgic watercolour, so it came off the cover, replaced by a real drawn design from the blank roll, which the owner had asked to lead with.
+- The README never explained the four prints. Reading the code showed that Symbol typesets each shape from the letters of the tape's own name (PEARLCOAST); a fresh screenshot of that went in.
+- A count was wrong: the prints redraw 37 illustrations (36-cell sheet + koi), not 39; the 39 are stickers.
+- The local checkout had another session's unpushed feature work, so the review was done in a worktree from the remote.
 
 ## Failures to learn from
 
